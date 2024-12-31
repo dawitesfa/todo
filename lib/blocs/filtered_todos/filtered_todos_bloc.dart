@@ -26,15 +26,15 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     required this.searchFilterBloc,
     required this.todoFilterBloc,
   }) : super(FilteredTodosState.initial()) {
-    todosSubscription = todosBloc.stream.listen((todosState) {
+    todosSubscription = todosBloc.stream.listen((_) {
       this.add(OnFilteredTodosEvent());
     });
 
-    todoFilterSubscription = todoFilterBloc.stream.listen((todoFilterState) {
+    todoFilterSubscription = todoFilterBloc.stream.listen((_) {
       this.add(OnFilteredTodosEvent());
     });
 
-    tsearchFilterSubscription = searchFilterBloc.stream.listen((searchState) {
+    tsearchFilterSubscription = searchFilterBloc.stream.listen((filterState) {
       this.add(OnFilteredTodosEvent());
     });
 
@@ -54,6 +54,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
           filteredTodos = todosBloc.state.todos;
           break;
       }
+      print('[why] ${searchFilterBloc.state.searchTerm}');
       if (searchFilterBloc.state.searchTerm.isNotEmpty) {
         filteredTodos = filteredTodos
             .where((todo) => todo.desc

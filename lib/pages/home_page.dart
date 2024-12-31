@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_demo/blocs/active_counter/active_counter_bloc.dart';
+import 'package:todo_demo/blocs/blocs.dart';
+import 'package:todo_demo/model/todo.dart';
 import 'package:todo_demo/pages/widgets/new_todo_field.dart';
+import 'package:todo_demo/pages/widgets/padded_container.dart';
+import 'package:todo_demo/pages/widgets/search_bar.dart';
 import 'package:todo_demo/pages/widgets/todo_list.dart';
+import 'package:todo_demo/utilities/utility.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,28 +15,33 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Expanded(
-          child: Row(
-            children: [
-              Text('TODO'),
-              Spacer(),
-              Text(
-                '${context.watch<ActiveCounterBloc>().state.activeCounter} items left',
-                style: TextStyle(color: Colors.red),
+        title: Text('TODO'),
+        centerTitle: false,
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+              textStyle: TextStyle(
+                fontSize: 18.0,
               ),
-            ],
+            ),
+            onPressed: () {
+              context.read<TodoFilterBloc>().add(
+                    OnFilterTabPressed(newFilter: Filter.active),
+                  );
+            },
+            child: Text(
+              '${context.watch<ActiveCounterBloc>().state.activeCounter} items left',
+            ),
           ),
-        ),
+        ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: NewTodoField(),
-          ),
+          PaddedContainer(child: NewTodoField()),
+          Gaps.v10,
+          PaddedContainer(child: CustomSearchBar()),
+          Gaps.v10,
           Expanded(child: TodoList()),
         ],
       ),

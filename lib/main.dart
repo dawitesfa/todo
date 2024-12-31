@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_demo/blocs/active_counter/active_counter_bloc.dart';
-import 'package:todo_demo/blocs/filtered_todos/filtered_todos_bloc.dart';
-import 'package:todo_demo/blocs/search_filter/search_filter_bloc.dart';
-import 'package:todo_demo/blocs/todo_filter/todo_filter_bloc.dart';
-import 'package:todo_demo/blocs/todos/todos_bloc.dart';
+import 'package:todo_demo/blocs/blocs.dart';
 import 'package:todo_demo/pages/home_page.dart';
 
 void main() {
@@ -31,7 +27,13 @@ class TodoApp extends StatelessWidget {
           create: (context) => FilteredTodosBloc(
             todosBloc: context.read<TodosBloc>(),
             todoFilterBloc: context.read<TodoFilterBloc>(),
-            searchFilterBloc: SearchFilterBloc(),
+            searchFilterBloc: context.read<SearchFilterBloc>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => EmptyListBloc(
+            filteredTodosBloc: context.read<FilteredTodosBloc>(),
+            todoFilterBloc: context.read<TodoFilterBloc>(),
           ),
         ),
       ],
